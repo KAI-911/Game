@@ -8,7 +8,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	window.CreateSimpleWindow(hInstance);
 	application::directX11::DirectX11::CreateInstance();
 
-	application::directX11::DirectX11::GetInstance().Initialize(window.GetWindowHandle());
+	if(!application::directX11::DirectX11::GetInstance().Initialize(window.GetWindowHandle())){
+		application::directX11::DirectX11::DeleteInstance();
+		return 1;
+	}
 
 	// ÉÅÉCÉìÉãÅ[Év
 	MSG	msg = {};
@@ -28,6 +31,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 		application::directX11::DirectX11::GetInstance().Draw();
 	}
-
+	application::directX11::DirectX11::DeleteInstance();
 	return 0;
 }
