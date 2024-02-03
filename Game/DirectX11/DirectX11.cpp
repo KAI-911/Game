@@ -1,11 +1,12 @@
 #include "DirectX11.h"
 #include "../Window/Window.h"
+
 namespace application
 {
 	namespace directX11
 	{
 		DirectX11* DirectX11::sInstance_ = nullptr;
-		constexpr float BACK_COLOR[4] = {0.0f,0.0f,1.0f,1.0f};
+		constexpr float BACK_COLOR[4] = {0.0f,0.0f,0.0f,1.0f};
 
 		bool DirectX11::Initialize(HWND windowHandle)
 		{
@@ -18,6 +19,10 @@ namespace application
 			if(!InitializeDepthStencilView()){
 				return false;
 			}
+			if(!InitializeShader()){
+				return false;
+			}
+			InitializeViewPort();
 			return true;
 		}
 
@@ -54,7 +59,7 @@ namespace application
 			};
 			D3D_FEATURE_LEVEL pLevels[] = {D3D_FEATURE_LEVEL_11_0};
 			D3D_FEATURE_LEVEL level;
-			HRESULT hr;
+			HRESULT hr = 0;
 			for(auto type : DriverTypes){
 				// ハードウェアデバイスを作成
 				hr = D3D11CreateDeviceAndSwapChain(
@@ -122,11 +127,78 @@ namespace application
 			return true;
 		}
 
+		bool DirectX11::InitializeShader()
+		{
+			if(!shader_.Initialize(*device_)){
+				return false;
+			}
+			context_->VSSetShader(shader_.GetVertexShader(), 0, 0);
+			context_->PSSetShader(shader_.GetPixelShader(), 0, 0);
+			context_->IASetInputLayout(shader_.GetInputLayout());
+			return true;
+		}
+
+		void DirectX11::InitializeViewPort()
+		{
+			viewPort_.TopLeftX = 0;
+			viewPort_.TopLeftY = 0;
+			viewPort_.Width = static_cast<float>(application::waindow::WINDOW_WIDTH);
+			viewPort_.Height = static_cast<float>(application::waindow::WINDOW_HEIGHT);
+			viewPort_.MinDepth = 0.0f;
+			viewPort_.MaxDepth = 1.0f;
+			context_->RSSetViewports(1, &viewPort_);
+		}
+
 		void DirectX11::Draw()
 		{
 			if(!device_ || !context_ || !renderTargetView_ || !swapChain_)return;
 			context_->ClearRenderTargetView(renderTargetView_, BACK_COLOR);
 			context_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+			
+			// @note 三角形の描画テスト
+			{
+				// 頂点情報
+				shader::SimpleVertex vertices[] =
+				{
+					{ {0.0f, 0.5f, 0.5f},   {1.0f, 0.0f, 0.0f, 1.0f} },
+					{ {0.5f, -0.5f, 0.5f},  {0.0f, 1.0f, 0.0f, 1.0f} },
+					{ {-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f, 1.0f} },
+				};
+
+				// 頂点バッファ仕様作成
+				D3D11_BUFFER_DESC vbDesc = {};
+				vbDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;	// デバイスにバインドするときの種類(頂点バッファ、インデックスバッファ、定数バッファなど)
+				vbDesc.ByteWidth = sizeof(vertices);			// 作成するバッファのバイトサイズ
+				vbDesc.MiscFlags = 0;							// その他のフラグ
+				vbDesc.StructureByteStride = 0;					// 構造化バッファの場合、その構造体のサイズ
+				vbDesc.Usage = D3D11_USAGE_DEFAULT;				// 作成するバッファの使用法
+				vbDesc.CPUAccessFlags = 0;
+
+				// 初期設定情報の作成
+				D3D11_SUBRESOURCE_DATA initData;
+				initData.pSysMem = vertices;
+				initData.SysMemPitch = 0;
+				initData.SysMemSlicePitch = 0;
+
+				// 頂点バッファの作成
+				ID3D11Buffer* vb;
+				device_->CreateBuffer(&vbDesc, &initData, &vb);
+
+				// 頂点バッファを描画で使えるようにセットする
+				UINT stride = sizeof(shader::SimpleVertex);
+				UINT offset = 0;
+				context_->IASetVertexBuffers(0, 1, &vb, &stride, &offset);
+
+				// プロミティブ・トポロジーをセット
+				context_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+				//描画先を設定
+				context_->OMSetRenderTargets(1, &renderTargetView_, depthStencilView_);
+
+				// 設定内容で描画
+				context_->Draw(3, 0);
+			}
+
 			swapChain_->Present(0, 0);
 		}
 
@@ -137,7 +209,8 @@ namespace application
 			, renderTargetView_(nullptr)
 			, depthStencilTexture_(nullptr)
 			, depthStencilView_(nullptr)
-
+			, viewPort_()
+			, shader_()
 		{
 		}
 		DirectX11::~DirectX11()

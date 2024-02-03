@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #pragma comment(lib, "d3d11.lib")
+#include "../Shader/Shader.h"
 
 namespace application
 {
@@ -16,6 +17,8 @@ namespace application
 			bool InitializeDeviceAndSwapChain(HWND windowHandle);
 			bool InitializeBackBuff();
 			bool InitializeDepthStencilView();
+			bool InitializeShader();
+			void InitializeViewPort();
 
 		public:
 			void Draw();
@@ -33,8 +36,10 @@ namespace application
 			ID3D11Texture2D* depthStencilTexture_;
 			//深度ステンシルビュー
 			ID3D11DepthStencilView* depthStencilView_;
-
-
+			//ビューポート
+			D3D11_VIEWPORT viewPort_;
+			//シェーダー
+			shader::Shader shader_;
 
 			//シングルトン
 		public:
