@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <d3d11.h>
 #include <stdint.h>
 
@@ -25,11 +25,11 @@ namespace application
 			ID3D11InputLayout* GetInputLayout()const { return inputLayout; }
 
 		private:
-			// ’¸“_ƒVƒF[ƒ_[
+			// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼
 			ID3D11VertexShader* vertexShader;
-			// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[
+			// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼
 			ID3D11PixelShader* pixelShader;
-			// “ü—ÍƒŒƒCƒAƒEƒg
+			// å…¥åŠ›ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
 			ID3D11InputLayout* inputLayout;
 		};
 

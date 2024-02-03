@@ -1,4 +1,4 @@
-#include "Shader.h"
+ï»¿#include "Shader.h"
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -36,17 +36,17 @@ namespace application
 			if(FAILED(D3DCompileFromFile(SHADER_FILE, nullptr, nullptr, VERTEX_SHADER_ENTRY_POINT_, "vs_5_0", 0, 0, &compiledVS, nullptr))){
 				return false;
 			}
-			// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ð“Ç‚Ýž‚Ý•ƒRƒ“ƒpƒCƒ‹
+			// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’èª­ã¿è¾¼ã¿ï¼†ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«
 			ID3DBlob* compiledPS;
 			if(FAILED(D3DCompileFromFile(SHADER_FILE, nullptr, nullptr, PIXEL_SHADER_ENTRY_POINT_, "ps_5_0", 0, 0, &compiledPS, nullptr))){
 				return false;
 			}
 
-			// ’¸“_ƒVƒF[ƒ_[ì¬
+			// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ä½œæˆ
 			if(FAILED(dsevice.CreateVertexShader(compiledVS->GetBufferPointer(), compiledVS->GetBufferSize(), nullptr, &vertexShader))){
 				return false;
 			}
-			// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[ì¬
+			// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ä½œæˆ
 			if(FAILED(dsevice.CreatePixelShader(compiledPS->GetBufferPointer(), compiledPS->GetBufferSize(), nullptr, &pixelShader))){
 				return false;
 			}
@@ -57,7 +57,7 @@ namespace application
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 				{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			};
-			// ’¸“_ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒgì¬
+			// é ‚ç‚¹ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆä½œæˆ
 			if(FAILED(dsevice.CreateInputLayout(&layout[0], layoutSize, compiledVS->GetBufferPointer(), compiledVS->GetBufferSize(), &inputLayout))){
 				return false;
 			}

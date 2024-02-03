@@ -1,4 +1,4 @@
-#include "Window.h"
+ï»¿#include "Window.h"
 
 namespace application
 {
@@ -12,7 +12,7 @@ namespace application
 
 		void Window::CreateSimpleWindow(HINSTANCE hInstance)
 		{
-			// ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚ğ‰Šú‰»
+			// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã‚’åˆæœŸåŒ–
 			WNDCLASSEX	windowClass = {};
 			windowClass.cbSize = sizeof(WNDCLASSEX);
 			windowClass.style = CS_HREDRAW | CS_VREDRAW;
@@ -22,11 +22,11 @@ namespace application
 			windowClass.lpszClassName = WINDOW_TITLE;
 			RegisterClassEx(&windowClass);
 
-			// ƒEƒBƒ“ƒhƒE‚ÌƒTƒCƒY‚ğ‹‚ß‚é
+			// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚µã‚¤ã‚ºã‚’æ±‚ã‚ã‚‹
 			RECT windowRect = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
 			AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
 
-			// ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹‚ğì¬
+			// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«ã‚’ä½œæˆ
 			windowHandle_ = CreateWindow(
 				WINDOW_TITLE,
 				WINDOW_TITLE,
@@ -40,7 +40,7 @@ namespace application
 				hInstance,
 				nullptr);
 
-			// ƒEƒBƒ“ƒhƒE‚Ì•\¦
+			// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤º
 			ShowWindow(windowHandle_, SW_SHOW);
 		}
 
@@ -48,11 +48,11 @@ namespace application
 		{
 			switch(nMsg){
 				case WM_DESTROY:
-				// I—¹
+				// çµ‚äº†
 				PostQuitMessage(0);
 				return 0;
 			}
-			// switch•¶‚ªˆ—‚µ‚È‚©‚Á‚½ƒƒbƒZ[ƒW‚ğˆ—
+			// switchæ–‡ãŒå‡¦ç†ã—ãªã‹ã£ãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡¦ç†
 			return DefWindowProc(hWnd, nMsg, wParam, lParam);
 		}
 

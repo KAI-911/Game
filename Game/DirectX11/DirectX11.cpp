@@ -1,4 +1,4 @@
-#include "DirectX11.h"
+ï»¿#include "DirectX11.h"
 #include "../Window/Window.h"
 
 namespace application
@@ -28,23 +28,23 @@ namespace application
 
 		bool DirectX11::InitializeDeviceAndSwapChain(HWND windowHandle)
 		{
-			// ƒfƒoƒCƒX‚ÆƒXƒƒbƒvEƒ`ƒFƒCƒ“ì¬
+			// ãƒ‡ãƒã‚¤ã‚¹ã¨ã‚¹ãƒ¯ãƒƒãƒ—ãƒ»ãƒã‚§ã‚¤ãƒ³ä½œæˆ
 			DXGI_SWAP_CHAIN_DESC sd;
 			ZeroMemory(&sd, sizeof(sd));
-			sd.BufferCount = 1;        // ƒoƒbƒNƒoƒbƒtƒ@‚Ì”
-			sd.BufferDesc.Width = application::waindow::WINDOW_WIDTH;    // ƒoƒbƒNƒoƒbƒtƒ@‚Ì•
-			sd.BufferDesc.Height = application::waindow::WINDOW_HEIGHT;    // ƒoƒbƒNƒoƒbƒtƒ@‚Ì‚‚³
-			sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;    // ƒtƒH[ƒ}ƒbƒg
-			sd.BufferDesc.RefreshRate.Numerator = 60;    // ƒŠƒtƒŒƒbƒVƒ…ƒŒ[ƒgi•ª•êj
-			sd.BufferDesc.RefreshRate.Denominator = 1;    // ƒŠƒtƒŒƒbƒVƒ…ƒŒ[ƒgi•ªŽqj
+			sd.BufferCount = 1;        // ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã®æ•°
+			sd.BufferDesc.Width = application::waindow::WINDOW_WIDTH;    // ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã®å¹…
+			sd.BufferDesc.Height = application::waindow::WINDOW_HEIGHT;    // ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã®é«˜ã•
+			sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;    // ãƒ•ã‚©ãƒ¼ãƒžãƒƒãƒˆ
+			sd.BufferDesc.RefreshRate.Numerator = 60;    // ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ãƒ¬ãƒ¼ãƒˆï¼ˆåˆ†æ¯ï¼‰
+			sd.BufferDesc.RefreshRate.Denominator = 1;    // ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥ãƒ¬ãƒ¼ãƒˆï¼ˆåˆ†å­ï¼‰
 			sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE;
 			sd.BufferDesc.Scaling = DXGI_MODE_SCALING_CENTERED;
-			sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;    // ƒoƒbƒNƒoƒbƒtƒ@‚ÌŽg—p–@
-			sd.OutputWindow = windowHandle;        // ŠÖ˜A•t‚¯‚éƒEƒBƒ“ƒhƒE
-			sd.SampleDesc.Count = 1;            // ƒ}ƒ‹ƒ`ƒTƒ“ƒvƒ‹iƒAƒ“ƒ`ƒGƒCƒŠƒAƒXj‚Ì”
-			sd.SampleDesc.Quality = 0;            // ƒ}ƒ‹ƒ`ƒTƒ“ƒvƒ‹iƒAƒ“ƒ`ƒGƒCƒŠƒAƒXj‚ÌƒNƒIƒŠƒeƒB
-			sd.Windowed = TRUE;        // ƒEƒBƒ“ƒhƒEƒ‚[ƒhiTRUE‚ªƒEƒBƒ“ƒhƒEƒ‚[ƒhj
-			sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;        // ƒ‚[ƒhŽ©“®Ø‚è‘Ö‚¦
+			sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;    // ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã®ä½¿ç”¨æ³•
+			sd.OutputWindow = windowHandle;        // é–¢é€£ä»˜ã‘ã‚‹ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦
+			sd.SampleDesc.Count = 1;            // ãƒžãƒ«ãƒã‚µãƒ³ãƒ—ãƒ«ï¼ˆã‚¢ãƒ³ãƒã‚¨ã‚¤ãƒªã‚¢ã‚¹ï¼‰ã®æ•°
+			sd.SampleDesc.Quality = 0;            // ãƒžãƒ«ãƒã‚µãƒ³ãƒ—ãƒ«ï¼ˆã‚¢ãƒ³ãƒã‚¨ã‚¤ãƒªã‚¢ã‚¹ï¼‰ã®ã‚¯ã‚ªãƒªãƒ†ã‚£
+			sd.Windowed = TRUE;        // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ï¼ˆTRUEãŒã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ï¼‰
+			sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;        // ãƒ¢ãƒ¼ãƒ‰è‡ªå‹•åˆ‡ã‚Šæ›¿ãˆ
 
 #if _DEBUG
 			UINT createDeviceFlags = D3D11_CREATE_DEVICE_DEBUG;
@@ -61,7 +61,7 @@ namespace application
 			D3D_FEATURE_LEVEL level;
 			HRESULT hr = 0;
 			for(auto type : DriverTypes){
-				// ƒn[ƒhƒEƒFƒAƒfƒoƒCƒX‚ðì¬
+				// ãƒãƒ¼ãƒ‰ã‚¦ã‚§ã‚¢ãƒ‡ãƒã‚¤ã‚¹ã‚’ä½œæˆ
 				hr = D3D11CreateDeviceAndSwapChain(
 					nullptr, type, nullptr, createDeviceFlags,
 					pLevels, 1, D3D11_SDK_VERSION, &sd,
@@ -155,9 +155,9 @@ namespace application
 			context_->ClearRenderTargetView(renderTargetView_, BACK_COLOR);
 			context_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 			
-			// @note ŽOŠpŒ`‚Ì•`‰æƒeƒXƒg
+			// @note ä¸‰è§’å½¢ã®æç”»ãƒ†ã‚¹ãƒˆ
 			{
-				// ’¸“_î•ñ
+				// é ‚ç‚¹æƒ…å ±
 				shader::SimpleVertex vertices[] =
 				{
 					{ {0.0f, 0.5f, 0.5f},   {1.0f, 0.0f, 0.0f, 1.0f} },
@@ -165,37 +165,37 @@ namespace application
 					{ {-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f, 1.0f} },
 				};
 
-				// ’¸“_ƒoƒbƒtƒ@Žd—lì¬
+				// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ä»•æ§˜ä½œæˆ
 				D3D11_BUFFER_DESC vbDesc = {};
-				vbDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;	// ƒfƒoƒCƒX‚ÉƒoƒCƒ“ƒh‚·‚é‚Æ‚«‚ÌŽí—Þ(’¸“_ƒoƒbƒtƒ@AƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@A’è”ƒoƒbƒtƒ@‚È‚Ç)
-				vbDesc.ByteWidth = sizeof(vertices);			// ì¬‚·‚éƒoƒbƒtƒ@‚ÌƒoƒCƒgƒTƒCƒY
-				vbDesc.MiscFlags = 0;							// ‚»‚Ì‘¼‚Ìƒtƒ‰ƒO
-				vbDesc.StructureByteStride = 0;					// \‘¢‰»ƒoƒbƒtƒ@‚Ìê‡A‚»‚Ì\‘¢‘Ì‚ÌƒTƒCƒY
-				vbDesc.Usage = D3D11_USAGE_DEFAULT;				// ì¬‚·‚éƒoƒbƒtƒ@‚ÌŽg—p–@
+				vbDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;	// ãƒ‡ãƒã‚¤ã‚¹ã«ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã¨ãã®ç¨®é¡ž(é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã€ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã€å®šæ•°ãƒãƒƒãƒ•ã‚¡ãªã©)
+				vbDesc.ByteWidth = sizeof(vertices);			// ä½œæˆã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®ãƒã‚¤ãƒˆã‚µã‚¤ã‚º
+				vbDesc.MiscFlags = 0;							// ãã®ä»–ã®ãƒ•ãƒ©ã‚°
+				vbDesc.StructureByteStride = 0;					// æ§‹é€ åŒ–ãƒãƒƒãƒ•ã‚¡ã®å ´åˆã€ãã®æ§‹é€ ä½“ã®ã‚µã‚¤ã‚º
+				vbDesc.Usage = D3D11_USAGE_DEFAULT;				// ä½œæˆã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã®ä½¿ç”¨æ³•
 				vbDesc.CPUAccessFlags = 0;
 
-				// ‰ŠúÝ’èî•ñ‚Ìì¬
+				// åˆæœŸè¨­å®šæƒ…å ±ã®ä½œæˆ
 				D3D11_SUBRESOURCE_DATA initData;
 				initData.pSysMem = vertices;
 				initData.SysMemPitch = 0;
 				initData.SysMemSlicePitch = 0;
 
-				// ’¸“_ƒoƒbƒtƒ@‚Ìì¬
+				// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ
 				ID3D11Buffer* vb;
 				device_->CreateBuffer(&vbDesc, &initData, &vb);
 
-				// ’¸“_ƒoƒbƒtƒ@‚ð•`‰æ‚ÅŽg‚¦‚é‚æ‚¤‚ÉƒZƒbƒg‚·‚é
+				// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã‚’æç”»ã§ä½¿ãˆã‚‹ã‚ˆã†ã«ã‚»ãƒƒãƒˆã™ã‚‹
 				UINT stride = sizeof(shader::SimpleVertex);
 				UINT offset = 0;
 				context_->IASetVertexBuffers(0, 1, &vb, &stride, &offset);
 
-				// ƒvƒƒ~ƒeƒBƒuEƒgƒ|ƒƒW[‚ðƒZƒbƒg
+				// ãƒ—ãƒ­ãƒŸãƒ†ã‚£ãƒ–ãƒ»ãƒˆãƒãƒ­ã‚¸ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
 				context_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-				//•`‰ææ‚ðÝ’è
+				//æç”»å…ˆã‚’è¨­å®š
 				context_->OMSetRenderTargets(1, &renderTargetView_, depthStencilView_);
 
-				// Ý’è“à—e‚Å•`‰æ
+				// è¨­å®šå†…å®¹ã§æç”»
 				context_->Draw(3, 0);
 			}
 

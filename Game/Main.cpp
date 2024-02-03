@@ -1,4 +1,4 @@
-#include <windows.h>
+ï»¿#include <windows.h>
 #include "Window/Window.h"
 #include "DirectX11/DirectX11.h"
 
@@ -13,14 +13,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		return 1;
 	}
 
-	// ƒƒCƒ“ƒ‹[ƒv
+	// ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—
 	MSG	msg = {};
 	while(true){
 		if(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)){
 			//============================================
-			// ƒEƒBƒ“ƒhƒEƒƒbƒZ[ƒWˆ—
+			// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†
 			//============================================
-			// I—¹ƒƒbƒZ[ƒW
+			// çµ‚äº†ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 			if(msg.message == WM_QUIT){
 				break;
 			}

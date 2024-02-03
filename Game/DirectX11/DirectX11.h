@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <d3d11.h>
 #pragma comment(lib, "d3d11.lib")
 #include "../Shader/Shader.h"
@@ -24,24 +24,24 @@ namespace application
 			void Draw();
 
 		private:
-			// Direct3DƒfƒoƒCƒX
+			// Direct3Dãƒ‡ãƒã‚¤ã‚¹
 			ID3D11Device* device_;
-			// Direct3DƒfƒoƒCƒXƒRƒ“ƒeƒLƒXƒg
+			// Direct3Dãƒ‡ãƒã‚¤ã‚¹ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
 			ID3D11DeviceContext* context_;
-			// ƒXƒƒbƒvƒ`ƒFƒCƒ“
+			// ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ã‚¤ãƒ³
 			IDXGISwapChain* swapChain_;
-			// ƒoƒbƒNƒoƒbƒtƒ@[‚ÌRenderTargetView
+			// ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ãƒ¼ã®RenderTargetView
 			ID3D11RenderTargetView* renderTargetView_;
-			//[“xƒXƒeƒ“ƒVƒ‹—pƒeƒNƒXƒ`ƒƒƒŠƒ\[ƒX
+			//æ·±åº¦ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ç”¨ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚½ãƒ¼ã‚¹
 			ID3D11Texture2D* depthStencilTexture_;
-			//[“xƒXƒeƒ“ƒVƒ‹ƒrƒ…[
+			//æ·±åº¦ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒ“ãƒ¥ãƒ¼
 			ID3D11DepthStencilView* depthStencilView_;
-			//ƒrƒ…[ƒ|[ƒg
+			//ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆ
 			D3D11_VIEWPORT viewPort_;
-			//ƒVƒF[ƒ_[
+			//ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼
 			shader::Shader shader_;
 
-			//ƒVƒ“ƒOƒ‹ƒgƒ“
+			//ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³
 		public:
 			static void CreateInstance() { if(!sInstance_){ sInstance_ = new DirectX11(); } }
 			static DirectX11& GetInstance() { return *sInstance_; }

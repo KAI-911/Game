@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <windows.h>
 #include <stdint.h>
 
@@ -16,13 +16,13 @@ namespace application
 			Window();
 
 			/// <summary>
-			/// ƒEƒBƒ“ƒhƒE‚Ìì¬
+			/// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ä½œæˆ
 			/// </summary>
 			/// <param name="hInstance"></param>
 			void CreateSimpleWindow(HINSTANCE hInstance);
 
 			/// <summary>
-			/// ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ
+			/// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
 			/// </summary>
 			/// <param name="hWnd"></param>
 			/// <param name="nMsg"></param>
