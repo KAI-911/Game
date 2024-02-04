@@ -16,30 +16,48 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{bba6ee2a-ba26-469b-95cf-5906a97081ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{5469b076-00a6-4b62-b1d4-cdcb35071da0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX11">
+      <UniqueIdentifier>{a11f7b88-1e2a-4add-b927-fe8dc845b780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{77061c88-3749-412e-ba5a-0e4b81914b92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Window\Window.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="DirectX11\DirectX11.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="Shader\Shader.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\Window.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Window\Window.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="DirectX11\DirectX11.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="Shader\Shader.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\Window.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Matrix4x4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\MathDefine.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

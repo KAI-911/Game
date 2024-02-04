@@ -138,6 +138,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX11\DirectX11.h" />
+    <ClInclude Include="Math\MathDefine.h" />
+    <ClInclude Include="Math\Matrix4x4.h" />
+    <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>
