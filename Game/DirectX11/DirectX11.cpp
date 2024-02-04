@@ -23,6 +23,17 @@ namespace application
 				return false;
 			}
 			InitializeViewPort();
+			if(!InitializeConstabtBuffer()){
+				return false;
+			}
+			if(!InitializeRasterizer()){
+				return false;
+			}
+
+			InitializeProjectionMatrix();
+			SetViewMatrix(math::Matrix4x4::CreateRotationXMatrix(45)*math::Matrix4x4::CreateTransformMatrix(0, 5, -5));
+			SetWorldMatrix(math::Matrix4x4::CreateRotationYMatrix(0));
+
 			return true;
 		}
 
@@ -149,20 +160,136 @@ namespace application
 			context_->RSSetViewports(1, &viewPort_);
 		}
 
+		bool DirectX11::InitializeConstabtBuffer()
+		{
+			D3D11_BUFFER_DESC cbDesc;
+			cbDesc.ByteWidth = sizeof(ConstantBuffer);
+			cbDesc.Usage = D3D11_USAGE_DEFAULT;
+			cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			cbDesc.CPUAccessFlags = 0;
+			cbDesc.MiscFlags = 0;
+			cbDesc.StructureByteStride = 0;
+			if(FAILED(device_->CreateBuffer(&cbDesc, NULL, &constantBuffer_))){
+				return false;
+			}
+			return true;
+		}
+
+		void DirectX11::InitializeProjectionMatrix()
+		{
+			math::Matrix4x4 mat = {};
+			float aspect = static_cast<float>(application::waindow::WINDOW_HEIGHT) / static_cast<float>(application::waindow::WINDOW_WIDTH);
+			float angle = tanf(math::AngleToRadian(VIEWING_ANGLE / 2));
+			float scaleX = 1 / angle;
+			float scaleY = 1 / angle / aspect;
+			float scaleZ = 1 / (FAR_CLIP - NEAR_CLIP) * FAR_CLIP;
+			float transZ = -NEAR_CLIP / (FAR_CLIP - NEAR_CLIP) * FAR_CLIP;
+			mat[0][0] = scaleX;
+			mat[1][1] = scaleY;
+			mat[2][2] = scaleZ;
+			mat[2][3] = 1;
+			mat[3][3] = 0;
+			mat[3][2] = transZ;
+			SetProjectionMatrix(mat);
+			context_->VSSetConstantBuffers(0, 1, &constantBuffer_);
+		}
+
+		bool DirectX11::InitializeRasterizer()
+		{
+			ID3D11RasterizerState* rasterizerState = nullptr;
+			D3D11_RASTERIZER_DESC rasterizerDesc =
+			{
+				D3D11_FILL_SOLID, // ワイヤーフレーム
+				D3D11_CULL_BACK,      // 裏面ポリゴンをカリングします
+				false,
+				0,
+				0.0f,
+				false,
+				false,
+				false,
+				false,
+				false
+			};
+
+			if(FAILED(device_->CreateRasterizerState(&rasterizerDesc, &rasterizerState))){
+				return false;
+			}
+
+			// ラスタライザーステート設定
+			context_->RSSetState(rasterizerState);
+			rasterizerState->Release();
+
+			return true;
+		}
+
+		void DirectX11::SetWorldMatrix(const math::Matrix4x4& worldMatrix)
+		{
+			constantBufferData_.worldMatrix = worldMatrix.GetTransposeMatrix();
+			context_->UpdateSubresource(constantBuffer_, 0, nullptr, &constantBufferData_, 0, 0);
+		}
+
+		void DirectX11::SetViewMatrix(const math::Matrix4x4& viewMatrix)
+		{
+			constantBufferData_.viewMatrix = viewMatrix.GetInverseMatrix().GetTransposeMatrix();
+			context_->UpdateSubresource(constantBuffer_, 0, nullptr, &constantBufferData_, 0, 0);
+		}
+
+		void DirectX11::SetProjectionMatrix(const math::Matrix4x4& projectionMatrix)
+		{
+			constantBufferData_.projectionMatrix = projectionMatrix.GetTransposeMatrix();
+			context_->UpdateSubresource(constantBuffer_, 0, nullptr, &constantBufferData_, 0, 0);
+		}
+
 		void DirectX11::Draw()
 		{
 			if(!device_ || !context_ || !renderTargetView_ || !swapChain_)return;
 			context_->ClearRenderTargetView(renderTargetView_, BACK_COLOR);
 			context_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 			
+			SetWorldMatrix(math::Matrix4x4::CreateRotationYMatrix(0.01f) * constantBufferData_.worldMatrix.GetTransposeMatrix());
 			// @note 三角形の描画テスト
 			{
 				// 頂点情報
 				shader::SimpleVertex vertices[] =
 				{
-					{ {0.0f, 0.5f, 0.5f},   {1.0f, 0.0f, 0.0f, 1.0f} },
-					{ {0.5f, -0.5f, 0.5f},  {0.0f, 1.0f, 0.0f, 1.0f} },
-					{ {-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f, 1.0f} },
+					{ { -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+					{ {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+					{ { -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+					{ {  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+
+					{ { -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
+					{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
+					{ {  0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
+					{ {  0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
+
+					{ { -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
+					{ { -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
+					{ { -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
+					{ { -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
+
+					{ {  0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+					{ {  0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+					{ {  0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+					{ {  0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+
+					{ { -0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
+					{ {  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
+					{ { -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
+					{ {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
+
+					{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+					{ { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+					{ {  0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+					{ {  0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+				};
+
+				uint16_t g_IndexList[] = {
+				 0,  1,  2,     3,  2,  1,
+				 4,  5,  6,     7,  6,  5,
+				 8,  9, 10,    11, 10,  9,
+				12, 13, 14,    15, 14, 13,
+				16, 17, 18,    19, 18, 17,
+				20, 21, 22,    23, 22, 21,
 				};
 
 				// 頂点バッファ仕様作成
@@ -189,14 +316,34 @@ namespace application
 				UINT offset = 0;
 				context_->IASetVertexBuffers(0, 1, &vb, &stride, &offset);
 
+				uint32_t count =36;
+				D3D11_BUFFER_DESC ibDesc;
+				ibDesc.ByteWidth = sizeof(uint16_t) * count;
+				ibDesc.Usage = D3D11_USAGE_DEFAULT;
+				ibDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+				ibDesc.CPUAccessFlags = 0;
+				ibDesc.MiscFlags = 0;
+				ibDesc.StructureByteStride = 0;
+
+				D3D11_SUBRESOURCE_DATA irData;
+				irData.pSysMem = g_IndexList;
+				irData.SysMemPitch = 0;
+				irData.SysMemSlicePitch = 0;
+
+				// 頂点バッファの作成
+				ID3D11Buffer* ib;
+				device_->CreateBuffer(&ibDesc, &irData, &ib);
+
+				context_->IASetIndexBuffer(ib, DXGI_FORMAT_R16_UINT, 0);
+
 				// プロミティブ・トポロジーをセット
-				context_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+				context_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 				//描画先を設定
 				context_->OMSetRenderTargets(1, &renderTargetView_, depthStencilView_);
 
 				// 設定内容で描画
-				context_->Draw(3, 0);
+				context_->DrawIndexed(count, 0, 0);
 			}
 
 			swapChain_->Present(0, 0);
@@ -211,8 +358,10 @@ namespace application
 			, depthStencilView_(nullptr)
 			, viewPort_()
 			, shader_()
-		{
-		}
+			, constantBuffer_(nullptr)
+			, constantBufferData_()
+		{}
+
 		DirectX11::~DirectX11()
 		{
 			if(device_){
@@ -238,6 +387,10 @@ namespace application
 			if(depthStencilView_){
 				depthStencilView_->Release();
 				depthStencilView_ = nullptr;
+			}
+			if(constantBuffer_){
+				constantBuffer_->Release();
+				constantBuffer_ = nullptr;
 			}
 		}
 
